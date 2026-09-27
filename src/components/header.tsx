@@ -104,11 +104,13 @@ export function Header() {
           <Link href="/" className="flex items-center" onClick={() => setIsMenuOpen(false)} aria-label="Beranda RMC">
             <span
               className={cn(
-                'flex items-center justify-center rounded-full transition-colors',
-                isTransparent ? 'bg-white/95 p-1.5 shadow-md' : 'bg-transparent p-0'
+                'flex items-center justify-center transition-colors',
+                isTransparent
+                  ? 'rounded-xl bg-black/40 p-1 shadow-md ring-1 ring-primary/30'
+                  : 'bg-transparent p-0'
               )}
             >
-              <Logo />
+              <Logo className="h-9 md:h-11" priority />
             </span>
           </Link>
         </div>

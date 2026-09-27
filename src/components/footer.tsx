@@ -12,7 +12,9 @@ export function Footer() {
     <footer className="w-full border-t border-primary-foreground/10 bg-foreground text-background pb-[max(0px,env(safe-area-inset-bottom))]">
       <div className="container grid grid-cols-1 gap-8 px-4 py-10 sm:py-12 md:grid-cols-3">
         <div className="flex flex-col items-start gap-4">
-          <Logo />
+          <span className="inline-flex rounded-xl bg-black/40 p-1.5 ring-1 ring-primary/25">
+            <Logo className="h-14" />
+          </span>
           <p className="text-sm text-background/70">{brand.tagline}</p>
           <div className="flex gap-4">
             {brand.social.instagram && (

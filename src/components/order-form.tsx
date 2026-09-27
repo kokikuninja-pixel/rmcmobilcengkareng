@@ -33,8 +33,6 @@ const carOptions = [
   { value: 'toyota-calya', label: 'Toyota Calya (7 Kursi, Matic)' },
   { value: 'daihatsu-sigra', label: 'Daihatsu Sigra (7 Kursi, Matic)' },
   { value: 'toyota-fortuner', label: 'Toyota Fortuner (7 Kursi, Matic)' },
-  { value: 'toyota-innova-zenix', label: 'Toyota Innova Zenix (7 Kursi, Matic)' },
-  { value: 'honda-brio', label: 'Honda Brio (5 Kursi, Matic)' },
   { value: 'lainnya', label: 'Lainnya / Tanya Admin' },
 ];
 

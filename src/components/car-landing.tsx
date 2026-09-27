@@ -24,6 +24,12 @@ import {
   MapPin,
   PhoneCall,
   Banknote,
+  Plane,
+  ShoppingBag,
+  Waves,
+  Landmark,
+  Palmtree,
+  Sparkles,
 } from 'lucide-react';
 import { carInventory } from '@/lib/cars';
 import { getWhatsAppLink } from '@/brands';
@@ -92,40 +98,34 @@ const keunggulan = [
 
 const cengkarengSpots = [
   {
+    icon: Plane,
     name: 'Bandara Soekarno-Hatta',
-    description: 'Bandara internasional utama Indonesia, akses mudah dari Cengkareng.',
-    imageUrl: '/images/Soekarno_Hatta_Airport_20260919143051.jpeg',
-    hint: 'bandara soekarno hatta terminal',
+    description: 'Bandara internasional utama Indonesia, akses langsung dari Cengkareng.',
   },
   {
+    icon: ShoppingBag,
     name: 'Mall Ciputra',
     description: 'Pusat belanja & hiburan besar di CitraRaya, dekat Cengkareng.',
-    imageUrl: '/images/Mall_Ciputra_CitraRaya_20260919143051.jpeg',
-    hint: 'mall ciputra citraraya tangerang',
   },
   {
+    icon: Waves,
     name: 'Pantai Indah Kapuk (PIK)',
     description: 'Area pesisir populer dengan kuliner, cafe, dan pemandangan laut.',
-    imageUrl: '/images/PIK_Pantai_Indah_Kapuk_20260919143051.jpeg',
-    hint: 'pantai indah kapuk PIK jakarta',
   },
   {
+    icon: Landmark,
     name: 'Kota Tua Jakarta',
     description: 'Kawasan heritage dengan bangunan kolonial, museum, dan kuliner khas.',
-    imageUrl: '/images/Kota_Tua_Jakarta_20260919143051.jpeg',
-    hint: 'kota tua jakarta fatahillah museum',
   },
   {
+    icon: Palmtree,
     name: 'Anyer & Carita Beach',
     description: 'Destinasi pantai favorit di Banten, cocok liburan keluarga.',
-    imageUrl: '/images/Anyer_Carita_Beach_20260919143051.jpeg',
-    hint: 'anyer carita beach banten',
   },
   {
+    icon: Sparkles,
     name: 'Taman Mini Indonesia Indah',
     description: 'Taman rekreasi budaya nusantara lengkap dengan museum & keagamaan.',
-    imageUrl: '/images/Taman_Mini_Indonesia_Indah_20260919143051.jpeg',
-    hint: 'taman mini indonesia indah jakarta',
   },
 ];
 
@@ -165,8 +165,8 @@ export function CarLanding() {
         {/* Background */}
         <div className="absolute inset-0">
           <Image
-            src="/images/Hero_White_car_driving_on_road_20260919164146.webp"
-            alt={`Mobil melaju di jalan menuju ${brand.city} dengan pemandangan kota`}
+            src="/images/Silver_SUV_parked_near_airport_2K_20260926211849.jpg"
+            alt={`Mobil SUV terparkir di dekat Bandara Soekarno-Hatta, ${brand.city}`}
             fill
             priority
             fetchPriority="high"
@@ -313,21 +313,13 @@ export function CarLanding() {
             {cengkarengSpots.map((spot) => (
               <Card
                 key={spot.name}
-                className="group overflow-hidden border hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
+                className="group overflow-hidden border bg-card hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                  <Image
-                    src={spot.imageUrl}
-                    alt={`${spot.name} - destinasi wisata ${brand.city}`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    quality={75}
-                    loading="lazy"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    data-ai-hint={spot.hint}
-                  />
-                </div>
-                <div className="p-5">
+                <div className="h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-primary" />
+                <div className="p-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center mb-4 ring-1 ring-primary/25">
+                    <spot.icon className="w-6 h-6 text-primary" />
+                  </div>
                   <h3 className="font-display font-bold text-lg mb-1">{spot.name}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {spot.description}
@@ -340,7 +332,7 @@ export function CarLanding() {
       </section>
 
       {/* Proses */}
-      <section className="py-16 md:py-24 bg-muted">
+      <section className="py-16 md:py-24 bg-background">
         <div className="container px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold">
@@ -437,7 +429,7 @@ export function CarLanding() {
             jadwal Anda hari ini!
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-8">
-            <Button asChild size="lg" className="h-12 sm:px-8 font-semibold bg-primary text-primary-foreground hover:bg-background hover:text-foreground sm:animate-pulse-glow">
+            <Button asChild size="lg" className="h-12 sm:px-8 font-semibold bg-gold-gradient text-primary-foreground shadow-glow hover:brightness-110 hover:bg-gold-gradient sm:animate-pulse-glow">
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                 Pesan via WhatsApp
                 <ArrowRight className="w-5 h-5 ml-2" />
