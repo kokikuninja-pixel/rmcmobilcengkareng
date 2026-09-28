@@ -26,6 +26,7 @@ export const rmcBrand: BrandConfig = {
     { href: '/armada', label: 'Armada' },
     { href: '/harga', label: 'Harga' },
     { href: '/galeri', label: 'Galeri' },
+    { href: '/artikel', label: 'Artikel' },
     { href: '/tentang-kami', label: 'Tentang Kami' },
     { href: '/lokasi', label: 'Lokasi' },
     { href: '/faq', label: 'FAQ' },

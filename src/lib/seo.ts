@@ -1,14 +1,26 @@
 import { getBrand, getSiteUrl } from '@/brands';
 
+type SeoOptions = {
+  /** Use 'article' for blog posts so social previews render correctly. */
+  ogType?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+  section?: string;
+  authors?: string[];
+};
+
 export function generateSeoMetadata(
   pageTitle: string,
   fullTitle: string,
   description: string,
-  path: string = '/'
+  path: string = '/',
+  options: SeoOptions = {}
 ) {
   const brand = getBrand();
   const siteUrl = getSiteUrl();
   const canonicalUrl = `${siteUrl}${path}`;
+  const ogType = options.ogType ?? 'website';
+  const isArticle = ogType === 'article';
 
   return {
     title: fullTitle,
@@ -29,7 +41,7 @@ export function generateSeoMetadata(
       },
     },
     openGraph: {
-      type: 'website',
+      type: ogType,
       locale: 'id_ID',
       url: canonicalUrl,
       siteName: brand.legalName,
@@ -43,6 +55,14 @@ export function generateSeoMetadata(
           alt: brand.legalName,
         },
       ],
+      ...(isArticle
+        ? {
+            publishedTime: options.publishedTime,
+            modifiedTime: options.modifiedTime ?? options.publishedTime,
+            authors: options.authors ?? [brand.legalName],
+            section: options.section,
+          }
+        : {}),
     },
     twitter: {
       card: 'summary_large_image',

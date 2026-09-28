@@ -67,7 +67,7 @@ export function Header() {
 
   useEffect(() => {
     const onResize = () => {
-      if (window.innerWidth >= 768) setIsMenuOpen(false);
+      if (window.innerWidth >= 1024) setIsMenuOpen(false);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
@@ -116,7 +116,7 @@ export function Header() {
         </div>
 
         <nav
-          className={cn('hidden md:flex md:items-center md:gap-5 lg:gap-6 text-sm', isTransparent ? 'text-white' : 'text-foreground')}
+          className={cn('hidden lg:flex lg:items-center lg:gap-5 xl:gap-6 text-sm', isTransparent ? 'text-white' : 'text-foreground')}
           aria-label="Navigasi utama"
         >
           {navLinks.map((link) => (
@@ -182,7 +182,7 @@ export function Header() {
             variant="ghost"
             size="icon"
             className={cn(
-              'h-10 w-10 md:hidden shrink-0',
+              'h-10 w-10 lg:hidden shrink-0',
               isTransparent ? 'text-white hover:bg-white/20 hover:text-white' : 'text-primary hover:bg-primary/20'
             )}
             onClick={() => setIsMenuOpen((v) => !v)}
@@ -199,7 +199,7 @@ export function Header() {
       <div
         id="mobile-nav"
         className={cn(
-          'md:hidden absolute inset-x-0 top-full z-50 border-b bg-background shadow-lg transition-all',
+          'lg:hidden absolute inset-x-0 top-full z-50 border-b bg-background shadow-lg transition-all',
           isMenuOpen
             ? 'opacity-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 pointer-events-none',
@@ -259,7 +259,7 @@ export function Header() {
       {isMenuOpen && (
         <button
           aria-label="Tutup menu"
-          className="fixed inset-0 top-16 md:top-20 bg-black/30 backdrop-blur-sm md:hidden -z-10"
+          className="fixed inset-0 top-16 lg:top-20 bg-black/30 backdrop-blur-sm lg:hidden -z-10"
           onClick={() => setIsMenuOpen(false)}
           tabIndex={-1}
         />

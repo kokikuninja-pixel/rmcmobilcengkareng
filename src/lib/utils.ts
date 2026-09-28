@@ -5,21 +5,26 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatRupiah(amount: number): string {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
+/** "2026-03-14T09:30" -> "14 Maret 2026, 09:30" */
+export function formatTanggal(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
 }
 
-export function generateWhatsAppMessage(carName?: string, pickupDate?: string, returnDate?: string): string {
-  let message = 'Halo RMC, saya ingin sewa mobil';
-  if (carName) message += ` ${carName}`;
-  message += ' di Cengkareng.';
-  if (pickupDate) message += ` Tanggal ambil: ${pickupDate}.`;
-  if (returnDate) message += ` Tanggal kembali: ${returnDate}.`;
-  message += ' Mohon info ketersediaan & harga terbaik.';
-  return message;
+/** "2026-03-14" -> "14 Maret 2026" */
+export function formatTanggalPendek(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
 }

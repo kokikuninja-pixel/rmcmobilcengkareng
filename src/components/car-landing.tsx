@@ -383,6 +383,17 @@ export function CarLanding() {
               ))}
             </Accordion>
           </Card>
+
+          <div className="mx-auto mt-8 max-w-3xl rounded-2xl border bg-card p-6 text-center">
+            <h3 className="font-display text-lg font-bold">Butuh panduan lebih lengkap?</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Kami menulis artikel soal cara memilih unit, persiapan bepergian, dan hal-hal
+              yang sering terlewat saat menerima mobil sewa.
+            </p>
+            <Button asChild variant="outline" className="mt-4 font-semibold">
+              <Link href="/artikel">Baca Artikel</Link>
+            </Button>
+          </div>
         </div>
       </section>
 

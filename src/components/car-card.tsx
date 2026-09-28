@@ -1,13 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { Car, Fuel, Settings, Users } from 'lucide-react';
+import { Car, Settings, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { formatRupiah } from '@/lib/utils';
 import { getWhatsAppLink } from '@/brands';
-import type { Car as CarType } from '@/lib/cars';
+import { PRICE_LABEL, type Car as CarType } from '@/lib/cars';
 
 interface CarCardProps {
   car: CarType;
@@ -56,9 +55,10 @@ export function CarCard({ car }: CarCardProps) {
           <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" /> {car.seats} Penumpang</span>
           <span className="flex items-center gap-1"><Settings className="h-3.5 w-3.5" /> {car.transmission}</span>
         </div>
-        <div className="flex items-center justify-between pt-3 border-t">
-          <span className="font-display font-bold text-lg text-primary">
-            {formatRupiah(car.price)}<span className="font-normal text-sm text-muted-foreground">/hari</span>
+        <div className="flex items-center justify-between gap-2 pt-3 border-t">
+          <span className="flex flex-col">
+            <span className="text-[11px] uppercase tracking-wide text-muted-foreground">Harga</span>
+            <span className="font-display font-bold text-base text-primary">{PRICE_LABEL}</span>
           </span>
           <Button asChild size="sm" className="h-9 px-3 font-semibold">
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">

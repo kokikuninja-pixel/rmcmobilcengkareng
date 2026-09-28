@@ -5,11 +5,10 @@ import { ArrowRight, Check, Clock, MapPin, MessageCircle } from 'lucide-react';
 import { PageShell } from '@/components/page-shell';
 import { SeoPageLayout, PageCta } from '@/components/seo-page-layout';
 import { Button } from '@/components/ui/button';
-import { carInventory } from '@/lib/cars';
+import { carInventory, PRICE_LABEL } from '@/lib/cars';
 import { serviceLocations, type ServiceLocation } from '@/lib/locations';
 import { getBrand, getWhatsAppLink } from '@/brands';
 import { generateSeoMetadata } from '@/lib/seo';
-import { formatRupiah } from '@/lib/utils';
 
 const brand = getBrand();
 
@@ -64,8 +63,13 @@ export default async function LocationPage({
     `Halo ${brand.shortName}, saya mau sewa mobil untuk area ${loc.name}. Mohon info ketersediaan dan harga.`
   );
 
-  const termurah = Math.min(...carInventory.map((c) => c.price));
   const otherLocations = serviceLocations.filter((l) => l.slug !== loc.slug).slice(0, 6);
+
+  const ringkasan = [
+    { icon: MapPin, label: 'Wilayah', value: loc.landmark },
+    { icon: Clock, label: 'Jarak', value: loc.distance },
+    { icon: Check, label: 'Harga', value: PRICE_LABEL },
+  ];
 
   return (
     <PageShell>
@@ -76,11 +80,7 @@ export default async function LocationPage({
         breadcrumbs={[{ label: 'Sewa Mobil', href: '/armada' }, { label: loc.name }]}
       >
         <div className="mb-12 grid gap-4 sm:grid-cols-3">
-          {[
-            { icon: MapPin, label: 'Wilayah', value: loc.landmark },
-            { icon: Clock, label: 'Jarak', value: loc.distance },
-            { icon: Check, label: 'Harga mulai', value: `${formatRupiah(termurah)}/hari` },
-          ].map((item) => (
+          {ringkasan.map((item) => (
             <div key={item.label} className="rounded-2xl border bg-card p-5">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 ring-1 ring-primary/25">
                 <item.icon className="h-5 w-5 text-primary" />
@@ -141,10 +141,7 @@ export default async function LocationPage({
                         {car.segment} &middot; {car.seats} kursi &middot; {car.transmission}
                       </p>
                     </div>
-                    <p className="shrink-0 font-display font-bold text-primary">
-                      {formatRupiah(car.price)}
-                      <span className="text-xs font-normal text-muted-foreground">/hari</span>
-                    </p>
+                    <p className="shrink-0 font-semibold text-primary">{PRICE_LABEL}</p>
                   </div>
                 ))}
               </div>

@@ -1,36 +1,42 @@
 import type { Metadata } from 'next';
-import { Check, Info, MessageCircle, Percent, Wallet } from 'lucide-react';
+import Link from 'next/link';
+import { Check, Info, MessageCircle, Percent, Wallet, X } from 'lucide-react';
 import { PageShell } from '@/components/page-shell';
 import { SeoPageLayout, PageCta } from '@/components/seo-page-layout';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { carInventory } from '@/lib/cars';
+import { carInventory, PRICE_LABEL } from '@/lib/cars';
 import { getBrand, getWhatsAppLink } from '@/brands';
 import { generateSeoMetadata } from '@/lib/seo';
-import { formatRupiah } from '@/lib/utils';
 
 const brand = getBrand();
 
 export const metadata: Metadata = generateSeoMetadata(
   'Harga',
-  `Daftar Harga Sewa Mobil ${brand.city} | ${brand.legalName}`,
-  `Informasi harga sewa mobil ${brand.city} per hari tanpa supir. Harga transparan tanpa biaya tersembunyi, borongan mingguan dan bulanan. Konfirmasi tarif via WhatsApp.`,
+  `Cara Mendapat Harga Sewa Mobil ${brand.city} | ${brand.legalName}`,
+  `Harga sewa mobil ${brand.city} dihitung langsung oleh admin, tanpa biaya tersembunyi. Kirim unit dan tanggal rencana via WhatsApp untuk mendapatkan penawaran terbaik.`,
   '/harga'
 );
 
-const borongan = [
-  { period: 'Harian', note: 'Minimal 1 hari (24 jam)', disc: 'Harga list' },
-  { period: 'Mingguan', note: '7 hari atau lebih', disc: 'Hemat hingga 10%' },
-  { period: 'Bulanan', note: '30 hari atau lebih', disc: 'Harga khusus' },
+const faktor = [
+  {
+    title: 'Unit yang dipilih',
+    text: 'Tiap mobil punya tarif yang berbeda. MPV keluarga dan SUV besar jelas tidak sama.',
+  },
+  {
+    title: 'Durasi sewa',
+    text: 'Sewa mingguan dan bulanan biasanya mendapat harga lebih murah daripada harian.',
+  },
+  {
+    title: 'Tanggal ambil',
+    text: 'Musim ramai, Ramadan, dan hari raya biasanya sedang ramai. Pemesanan lebih awal membantu.',
+  },
+  {
+    title: 'Lokasi antar',
+    text: 'Menyambut di kantor lebih murah. Antar ke lokasi jauh menambah biaya sesuai jarak.',
+  },
 ];
 
-const termasuk = [
-  'Sewa(unit)',
-  'Pajak kendaraan',
-  'Asuransi aktif',
-  'Servicing rutin',
-  'Bantuan jalan 24/7',
-];
+const termasuk = ['Sewa unit', 'Pajak kendaraan', 'Asuransi aktif', 'Servicing rutin', 'Bantuan jalan 24/7'];
 
 const tidakTermasuk = [
   'BBM (Anda mengisi sendiri)',
@@ -43,76 +49,111 @@ export default function HargaPage() {
   const whatsappUrl = getWhatsAppLink(
     `Halo ${brand.shortName}, saya mau tanya harga sewa mobil untuk ${brand.city}.`
   );
-  const termurah = Math.min(...carInventory.map((c) => c.price));
 
   return (
     <PageShell>
       <SeoPageLayout
         eyebrow="Harga"
-        title={`Daftar Harga Sewa Mobil ${brand.city}`}
-        description="Harga di bawah adalah tarif indikatif per hari, sudah termasuk sewa dan pajak. Tarif final dikonfirmasi admin sesuai tanggal, durasi, dan unit yang dipilih."
+        title={`Cara Mendapat Harga Sewa Mobil ${brand.city}`}
+        description="Kami tidak menaruh angka harga di halaman ini. Alasannya sederhana: tarif yang benar bergantung pada unit, tanggal, dan durasi. Admin kami menghitungkannya dan membalas lewat WhatsApp, biasanya dalam hitungan menit."
         breadcrumbs={[{ label: 'Harga' }]}
       >
-        {/* Info banner */}
-        <div className="mb-10 flex gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-5">
+        {/* Alasan */}
+        <div className="mb-12 flex gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-5">
           <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-          <p className="text-sm leading-relaxed">
-            Harga bersifat indikatif dan bisa berubah sesuai musim serta ketersediaan unit.
-            Untuk tarif pasti, kirim nama unit dan tanggal rencana lewat WhatsApp.
-          </p>
+          <div className="text-sm leading-relaxed">
+            <p className="font-semibold">Kenapa harga tidak ditulis di sini?</p>
+            <p className="mt-1 text-muted-foreground">
+              Harga yang tertulis di internet sering kali sudah kedaluwarsa, tidak berlaku
+              untuk tanggal Anda, atau menutupi biaya tambahan. Dengan harga lewat admin,
+              angka yang Anda terima benar-benar berlaku untuk perjalanan Anda.
+            </p>
+          </div>
         </div>
 
-        {/* Harga per unit */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {carInventory.map((car) => (
-            <div
-              key={car.id}
-              className="flex flex-col rounded-2xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50"
-            >
-              <div className="mb-3 flex items-start justify-between gap-3">
+        {/* Faktor penentu harga */}
+        <section>
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">
+            Apa Saja yang Menentukan Harga
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Empat hal ini jadi dasar perhitungan tarif harian.
+          </p>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            {faktor.map((item, i) => (
+              <div
+                key={item.title}
+                className="flex gap-4 rounded-2xl border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50"
+              >
+                <span className="font-display text-3xl font-extrabold text-primary/25">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
                 <div>
-                  <h2 className="font-display text-lg font-bold">{car.name}</h2>
-                  <p className="text-xs text-muted-foreground">
-                    {car.segment} · {car.seats} kursi · {car.transmission}
+                  <h3 className="font-display font-bold">{item.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                    {item.text}
                   </p>
                 </div>
-                {car.popular && <Badge className="bg-primary text-primary-foreground">Favorit</Badge>}
               </div>
+            ))}
+          </div>
+        </section>
 
-              <p className="mb-5">
-                <span className="font-display text-3xl font-bold text-primary">
-                  {formatRupiah(car.price)}
-                </span>
-                <span className="text-sm text-muted-foreground"> /hari</span>
-              </p>
+        {/* Daftar unit */}
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold sm:text-3xl">Unit yang Bisa Dipesan</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Kirim nama unit yang Anda incar, admin akan mengonfirmasi ketersediaan sekaligus
+            harganya.
+          </p>
 
-              <ul className="mb-6 space-y-2 text-sm">
-                {termasuk.map((item) => (
-                  <li key={item} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 shrink-0 text-primary" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+          <div className="mt-8 divide-y overflow-hidden rounded-2xl border">
+            {carInventory.map((car) => (
+              <div
+                key={car.id}
+                className="flex flex-wrap items-center justify-between gap-4 bg-card p-5"
+              >
+                <div>
+                  <p className="font-display font-bold">{car.name}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{car.feature}</p>
+                  <p className="mt-1.5 text-xs text-muted-foreground">
+                    {car.segment} &middot; {car.seats} penumpang &middot; {car.transmission}
+                  </p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="rounded-full bg-primary/15 px-3 py-1 text-xs font-semibold text-primary">
+                    {PRICE_LABEL}
+                  </span>
+                  <Button asChild size="sm" className="font-semibold">
+                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                      Tanya
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
 
-              <Button asChild className="mt-auto w-full font-semibold">
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Tanya Harga Final
-                </a>
-              </Button>
-            </div>
-          ))}
-        </div>
+          <Button asChild size="lg" className="mt-6 h-12 w-full font-semibold shadow-glow sm:w-auto">
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="mr-2 h-5 w-5" />
+              Minta Penawaran Sekarang
+            </a>
+          </Button>
+        </section>
 
         {/* Borongan */}
         <section className="mt-16">
           <div className="mb-6 flex items-center gap-2">
             <Percent className="h-5 w-5 text-primary" />
-            <h2 className="font-display text-2xl font-bold">Harga Borongan</h2>
+            <h2 className="font-display text-2xl font-bold">Sewa Borongan</h2>
           </div>
           <div className="grid gap-5 sm:grid-cols-3">
-            {borongan.map((row) => (
+            {[
+              { period: 'Harian', note: 'Minimal 1 hari (24 jam)', disc: 'Tarif harian' },
+              { period: 'Mingguan', note: '7 hari atau lebih', disc: 'Lebih hemat' },
+              { period: 'Bulanan', note: '30 hari atau lebih', disc: 'Harga khusus' },
+            ].map((row) => (
               <div key={row.period} className="rounded-2xl border bg-card p-6 text-center">
                 <p className="font-display text-xl font-bold text-primary">{row.period}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{row.note}</p>
@@ -122,7 +163,7 @@ export default function HargaPage() {
           </div>
         </section>
 
-        {/* Termasuk / tidak termasuk */}
+        {/* Termasuk / tidak */}
         <section className="mt-16 grid gap-6 md:grid-cols-2">
           <div className="rounded-2xl border bg-card p-6">
             <div className="mb-4 flex items-center gap-2">
@@ -141,7 +182,7 @@ export default function HargaPage() {
 
           <div className="rounded-2xl border bg-card p-6">
             <div className="mb-4 flex items-center gap-2">
-              <Info className="h-5 w-5 text-muted-foreground" />
+              <X className="h-4 w-4 text-muted-foreground" />
               <h2 className="font-display text-lg font-bold">Belum Termasuk</h2>
             </div>
             <ul className="space-y-2.5">
@@ -155,27 +196,20 @@ export default function HargaPage() {
           </div>
         </section>
 
-        <div className="mt-12 rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            Mulai dari{' '}
-            <span className="font-display text-lg font-bold text-primary">{formatRupiah(termurah)}</span>{' '}
-            per hari
-          </p>
-          <Button asChild size="lg" className="mt-4 h-12 px-8 font-semibold shadow-glow">
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="mr-2 h-5 w-5" />
-              Konfirmasi Harga via WhatsApp
-            </a>
-          </Button>
-        </div>
+        <p className="mt-10 text-center text-sm text-muted-foreground">
+          Ingin lihat spesifikasi tiap unit?{' '}
+          <Link href="/armada" className="font-semibold text-primary hover:underline">
+            Buka halaman armada
+          </Link>
+        </p>
       </SeoPageLayout>
 
       <PageCta
-        title="Harga transparan, tanpa biaya tersembunyi"
-        description={`Tanya tarif ${brand.shortName} kapan saja. Admin kami balas cepat di jam operasional 05.00 sampai 21.30 WIB.`}
+        title="Tinggal chat, admin yang hitung harganya"
+        description={`Sebutkan unit dan tanggal rencana. Admin ${brand.shortName} akan membalas dengan penawaran yang benar-benar berlaku.`}
         ctaHref={whatsappUrl}
-        secondaryLabel="Lihat Armada"
-        secondaryHref="/armada"
+        secondaryLabel="Baca FAQ"
+        secondaryHref="/faq"
       />
     </PageShell>
   );

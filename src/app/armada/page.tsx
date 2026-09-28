@@ -4,10 +4,9 @@ import { PageShell } from '@/components/page-shell';
 import { SeoPageLayout, PageCta } from '@/components/seo-page-layout';
 import { CarCard } from '@/components/car-card';
 import { Button } from '@/components/ui/button';
-import { carInventory } from '@/lib/cars';
+import { carInventory, PRICE_LABEL } from '@/lib/cars';
 import { getBrand, getWhatsAppLink } from '@/brands';
 import { generateSeoMetadata } from '@/lib/seo';
-import { formatRupiah } from '@/lib/utils';
 
 const brand = getBrand();
 
@@ -32,24 +31,21 @@ export default function ArmadaPage() {
     `Halo ${brand.shortName}, saya mau tanya armada yang tersedia untuk sewa di ${brand.city}.`
   );
 
-  const termurah = Math.min(...carInventory.map((c) => c.price));
-  const termahal = Math.max(...carInventory.map((c) => c.price));
-
   return (
     <PageShell>
       <SeoPageLayout
         eyebrow="Armada"
         title={`Armada Sewa Mobil ${brand.city}`}
-        description="Semua unit disewakan lepas kunci tanpa supir. Pilih unit sesuai kebutuhan, dari MPV keluarga yang irit hingga SUV untuk perjalanan jauh."
+        description="Semua unit disewakan lepas kunci tanpa supir. Pilih unit sesuai kebutuhan, dari MPV keluarga yang irit hingga SUV untuk perjalanan jauh. Tarif dikonfirmasi langsung oleh admin."
         breadcrumbs={[{ label: 'Armada' }]}
       >
         {/* Ringkasan */}
         <div className="mb-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {[
             { label: 'Total unit', value: `${carInventory.length} unit` },
-            { label: 'Harga mulai', value: `${formatRupiah(termurah)}/hari` },
-            { label: 'Harga tertinggi', value: `${formatRupiah(termahal)}/hari` },
+            { label: 'Harga', value: PRICE_LABEL },
             { label: 'Sistem sewa', value: 'Lepas kunci' },
+            { label: 'Tanpa supir', value: 'Self drive' },
           ].map((item) => (
             <div
               key={item.label}
@@ -83,7 +79,8 @@ export default function ArmadaPage() {
                   <th className="px-4 py-3 text-left font-semibold">Segmen</th>
                   <th className="px-4 py-3 text-left font-semibold">Kursi</th>
                   <th className="px-4 py-3 text-left font-semibold">Transmisi</th>
-                  <th className="px-4 py-3 text-right font-semibold">Harga / hari</th>
+                  <th className="px-4 py-3 text-left font-semibold">Cocok untuk</th>
+                  <th className="px-4 py-3 text-right font-semibold">Harga</th>
                 </tr>
               </thead>
               <tbody>
@@ -97,16 +94,17 @@ export default function ArmadaPage() {
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">{car.seats} penumpang</td>
                     <td className="px-4 py-3 text-muted-foreground">{car.transmission}</td>
-                    <td className="px-4 py-3 text-right font-semibold text-primary">
-                      {formatRupiah(car.price)}
-                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">{car.feature}</td>
+                    <td className="px-4 py-3 text-right font-semibold text-primary">{PRICE_LABEL}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            Harga bersifat indikatif dan dapat berubah. Tarif final dikonfirmasi admin via WhatsApp.
+            Tarif tidak kami tampilkan di halaman ini. Harga tergantung pada unit, tanggal,
+            dan durasi sewa, jadi admin yang menghitungkannya agar Anda mendapat offer
+            terbaik.
           </p>
         </section>
 
